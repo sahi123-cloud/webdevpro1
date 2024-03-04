@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .formData{
+            display: flex;
+           flex-wrap: wrap;
+           align-items: center;
+           justify-content: center;
+            
+        }
+     .formEntry {
+        
+            border: 1px solid black;
+            width: 400px;
+            height: 200px;
+            align-items: center;
+           
+            margin: 10px ;
+        }
+     .nav{
+        height: 40px;
+        border: 1px solid black;
+        
+     }
+        
+    </style>
 </head>
 <body>
     <nav class="nav">
@@ -11,5 +35,14 @@
         <a href="/form">Share It</a>
        
     </nav>
+    <div class="formData">
+        <% data.forEach(item => { %>
+            <div class="formEntry">
+                <p><strong>Name:</strong> <%= item.name %></p>
+                <p><strong>Registration:</strong> <%= item.reg %></p>
+                <p><strong>Branch:</strong> <%= item.branch %></p>
+            </div>
+        <% }); %>
+    </div>
 </body>
 </html>
