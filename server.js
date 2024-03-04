@@ -12,18 +12,14 @@ const client = new MongoClient(url);
 app.set('view engine', 'ejs');
 // Configure body-parser middleware
 app.use(bp.urlencoded({ extended: true }));
-app.get("/home",(req,res)=>{
-    res.render('home');
+app.get("/",async(req,res)=>{
+    const data=await getData();
+    res.render('home',{data:data});
 })
-app.get("/", async (req, res) => {
-    try {
-        const rest = await getData();
-        console.log(rest);
-        res.render("form");
-    } catch (err) {
-        console.log(err.stack);
-    }
+app.get("/form", async (req, res) => {
+    res.render('form');
 });
+
 
 app.post("/form", async (req, res) => {
     try {
