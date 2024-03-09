@@ -24,7 +24,6 @@
      .nav{
         height: 40px;
         border: 1px solid black;
-        
      }
         
     </style>
@@ -41,6 +40,9 @@
                 <p><strong>Name:</strong> <%= item.name %></p>
                 <p><strong>Registration:</strong> <%= item.reg %></p>
                 <p><strong>Branch:</strong> <%= item.branch %></p>
+                <form method="POST" action="/delete/<%= item._id %>?_method=DELETE">
+                    <button name="delete">delete</button>
+                </form>
             </div>
         <% }); %>
     </div>
