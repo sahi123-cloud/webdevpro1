@@ -12,6 +12,7 @@ const client = new MongoClient(url);
 app.set('view engine', 'ejs');
 // Configure body-parser middleware
 app.use(bp.urlencoded({ extended: true }));
+
 app.get("/",async(req,res)=>{
     const data=await getData();
     console.log(data);
@@ -46,7 +47,22 @@ app.post("/form", async (req, res) => {
         console.log(err.stack);
     }
 });
-
+app.post("/like/:id",async(req,res)=>{
+    try{
+   const id=req.params.id;
+   await client.connect();
+   const database=client.db('mydbs');
+   const collection=database.collection('collection');
+   const objectId=new ObjectId(id);
+   await collection.updateOne({_id:objectId},{$inc:{likes:1}});
+   const updatedData = await getData();
+        // Render the home template with the updated data
+        res.render("home", { data: updatedData });
+}
+catch (err) {
+    console.log(err.stack);
+}
+});
 async function getData() {
     try {
         await client.connect();
@@ -76,6 +92,7 @@ app.delete("/delete/:id", async (req,res)=>{
         console.log(err.stack);
     }
 })
+
 app.listen(3000, () => {
     console.log('server started');
 });
