@@ -57,7 +57,7 @@ app.post("/like/:id",async(req,res)=>{
    await collection.updateOne({_id:objectId},{$inc:{likes:1}});
    const updatedData = await getData();
         // Render the home template with the updated data
-        res.render("home", { data: updatedData });
+        res.render("home", {data: updatedData });
 }
 catch (err) {
     console.log(err.stack);
