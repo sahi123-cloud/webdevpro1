@@ -41,6 +41,7 @@
                 <p><strong>Name:</strong> <%= item.name %></p>
                 <p><strong>Registration:</strong> <%= item.reg %></p>
                 <p><strong>Branch:</strong> <%= item.branch %></p>
+                <p><strong>content:</strong> <%= item.content %></p>
                 <form method="POST" action="/delete/<%= item._id %>?_method=DELETE">
                     <button name="delete">delete</button>
                 </form>
