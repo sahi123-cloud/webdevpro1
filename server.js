@@ -2,16 +2,13 @@ const express = require('express');
 const app = express();
 const ejs = require("ejs");
 const bp = require('body-parser');
-const { MongoClient, ObjectId } = require("mongodb");
-
-// Replace the following with your Atlas connection string                                                                                                                                        
+const { MongoClient, ObjectId } = require("mongodb");                                                                                                                                      
 const url = "mongodb+srv://sahithi:sahithi123@cluster0.kgltdad.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
-// Connect to your Atlas cluster
 const client = new MongoClient(url);
 app.set('view engine', 'ejs');
-// Configure body-parser middleware
 app.use(bp.urlencoded({ extended: true }));
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 
 app.get("/",async(req,res)=>{
     const data=await getData();
@@ -22,7 +19,6 @@ app.get("/",async(req,res)=>{
 app.get("/form", async (req, res) => {
     res.render('form');
 });
-
 
 app.post("/form", async (req, res) => {
     try {
@@ -40,13 +36,31 @@ app.post("/form", async (req, res) => {
         console.log(result);
          // Fetch the updated data from the database
          const updatedData = await getData();
+         data=updatedData;
         
          // Render the home template with the updated data
-         res.render("home", { data: updatedData });
+         res.redirect('/');
     } catch (err) {
         console.log(err.stack);
     }
 });
+
+
+
+app.delete("/delete/:id", async (req,res)=>{
+    try{
+        const id=req.params.id;
+        await client.connect();
+        const database=client.db("mydbs");
+        const collection=database.collection("collection");
+        const objectId = new ObjectId(id);
+        const result=await collection.deleteOne({_id: objectId});
+        res.redirect('/');
+    }
+    catch(err){
+        console.log(err.stack);
+    }
+})
 app.post("/like/:id",async(req,res)=>{
     try{
    const id=req.params.id;
@@ -63,6 +77,7 @@ catch (err) {
     console.log(err.stack);
 }
 });
+
 async function getData() {
     try {
         await client.connect();
@@ -74,24 +89,6 @@ async function getData() {
         console.log(err.stack);
     }
 }
-const methodOverride = require('method-override');
-// After initializing your Express app
-app.use(methodOverride('_method'));
-
-app.delete("/delete/:id", async (req,res)=>{
-    try{
-        const id=req.params.id;
-        await client.connect();
-        const database=client.db("mydbs");
-        const collection=database.collection("collection");
-        const objectId = new ObjectId(id);
-        const result=await collection.deleteOne({_id: objectId});
-        res.redirect('/');
-    }
-    catch(err){
-        console.log(err.stack);
-    }
-})
 
 app.listen(3000, () => {
     console.log('server started');
